@@ -19,7 +19,6 @@ import json
 import dash.dependencies as dd
 import plotly.graph_objects as go
 from dash.dependencies import Input, Output
-import squarify
 import base64
 import numpy as np
 import pandas as pd
@@ -27,7 +26,6 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import matplotlib
 import matplotlib.pyplot as plt
-from wordcloud import WordCloud
 
 
 app = Dash(__name__)
@@ -74,7 +72,7 @@ fig5 = px.scatter(df, x="salary", y="ssc_p", color="gender",
 fig6 = px.histogram(df, x="salary")
 fig7 = px.box(df, y="etest_p")
 
-fig8 = px.treemap(df, path=[px.Constant(
+fig8 = px.treemap(df2, path=[px.Constant(
     "status"), 'degree_t', 'specialisation', 'gender'], values='salary')
 fig8.update_traces(root_color="lightgrey")
 fig8.update_layout(margin=dict(t=50, l=25, r=25, b=25))
@@ -146,7 +144,7 @@ test_base64 = base64.b64encode(open(test_png, 'rb').read()).decode('ascii')
 
 app.layout = html.Div(children=[
     html.H1(
-        children='Hello Dash',
+        children='Team DataWiz',
         style={
             'textAlign': 'center'
         }
@@ -277,40 +275,49 @@ def update_bar_chart(year):
 
 
 @app.callback(
-    Output("mixedgraph","figure"),
-    Input("dropdown_1","value"))
+    Output("mixedgraph", "figure"),
+    Input("dropdown_1", "value"))
 def update_mixedgraph(value):
-    if(value=="gender"):
-        l=list(df['gender'].value_counts())
-        dg=pd.DataFrame({"Gender":["Male","Female"],"Count":l})
-        fig=px.bar(dg,x="Gender",y="Count",color_discrete_sequence=px.colors.sequential.RdBu,)
+    if(value == "gender"):
+        l = list(df['gender'].value_counts())
+        dg = pd.DataFrame({"Gender": ["Male", "Female"], "Count": l})
+        fig = px.bar(dg, x="Gender", y="Count",
+                     color_discrete_sequence=px.colors.sequential.RdBu,)
         return fig
-    elif(value=="degree_t"):
-        l=list(df['degree_t'].value_counts())
-        dg=pd.DataFrame({"degree_t":["Comm & Mgmt","Sci & Tech","Others"],"Count":l})
-        fig=px.bar(dg,x="degree_t",y="Count",color_discrete_sequence=px.colors.sequential.RdBu, )
+    elif(value == "degree_t"):
+        l = list(df['degree_t'].value_counts())
+        dg = pd.DataFrame(
+            {"degree_t": ["Comm & Mgmt", "Sci & Tech", "Others"], "Count": l})
+        fig = px.bar(dg, x="degree_t", y="Count",
+                     color_discrete_sequence=px.colors.sequential.RdBu, )
         return fig
-    elif(value=="hsc_c"):
-        l=list(df['hsc_s'].value_counts())
-        dg=pd.DataFrame({"hsc_c":["Commerce","Science","Arts"],"Count":l})
-        fig=px.bar(dg,x="hsc_c",y="Count",color_discrete_sequence=px.colors.sequential.RdBu, )
-        return fig    
-    elif(value=="specialisation"):
-        l=list(df['specialisation'].value_counts())
-        dg=pd.DataFrame({"specialisation":["Mkt&Fin","Mkt&HR"],"Count":l})
-        fig=px.bar(dg,x="specialisation",y="Count",color_discrete_sequence=px.colors.sequential.RdBu, )
+    elif(value == "hsc_c"):
+        l = list(df['hsc_s'].value_counts())
+        dg = pd.DataFrame(
+            {"hsc_c": ["Commerce", "Science", "Arts"], "Count": l})
+        fig = px.bar(dg, x="hsc_c", y="Count",
+                     color_discrete_sequence=px.colors.sequential.RdBu, )
         return fig
-    elif(value=="workex"):
-        l=list(df['workex'].value_counts())
-        dg=pd.DataFrame({"workex":["No","Yes"],"Count":l})
-        fig=px.bar(dg,x="workex",y="Count",color_discrete_sequence=px.colors.sequential.RdBu, )
+    elif(value == "specialisation"):
+        l = list(df['specialisation'].value_counts())
+        dg = pd.DataFrame(
+            {"specialisation": ["Mkt&Fin", "Mkt&HR"], "Count": l})
+        fig = px.bar(dg, x="specialisation", y="Count",
+                     color_discrete_sequence=px.colors.sequential.RdBu, )
+        return fig
+    elif(value == "workex"):
+        l = list(df['workex'].value_counts())
+        dg = pd.DataFrame({"workex": ["No", "Yes"], "Count": l})
+        fig = px.bar(dg, x="workex", y="Count",
+                     color_discrete_sequence=px.colors.sequential.RdBu, )
         return fig
     else:
-        l=list(df['status'].value_counts())
-        dg=pd.DataFrame({"status":["Placed","Not Placed"],"Count":l})
-        fig=px.bar(dg,x="status",y="Count",color_discrete_sequence=px.colors.sequential.RdBu, )   
-        return fig 
-        
+        l = list(df['status'].value_counts())
+        dg = pd.DataFrame({"status": ["Placed", "Not Placed"], "Count": l})
+        fig = px.bar(dg, x="status", y="Count",
+                     color_discrete_sequence=px.colors.sequential.RdBu, )
+        return fig
+
 
 if __name__ == '__main__':
     app.run_server(debug=True)
